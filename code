@@ -1,0 +1,363 @@
+### print("hellp")
+%matplotlib inline 
+
+import matplotlib
+import matplotlib.pyplot as plt
+import plotly 
+import plotly.plotly as py     
+import plotly.graph_objs as go  
+import cufflinks as cf
+import pandas as pd
+import folium
+import warnings
+#matplotlib.rcParams['figure.figsize'] = (20.0, 10.0) # larger figure size
+warnings.filterwarnings('ignore')
+
+
+import numpy as np
+import matplotlib.pyplot as plt
+
+chickenmeals = {
+  '1.Chicken and rice' : '550',
+  '2.Chicken and pasta' : '600',
+  '3.Chicken baked' : '350',
+  '4.Chicken sandwich' : '280',
+  '5.Chicken baked' : '250',
+  '6.Chicken salad' : '300',
+  '7.Chicken parmeasan' : '560',
+  '8.Chicken grilled' : '320'
+  }
+
+beefmeals = {
+  '1.Beef and rice' : '700',
+  '2.Beef and pasta' : '850',
+  '3.Beef baked' : '650',
+  '4.Beef sandwich' : '400',
+  '5.Beef salad' : '250',
+  '6.Beef  parmeasan' : '700',
+  '7.Beef  grilled' : '350',
+  '8. Beef burger' : '490'
+}
+
+fishmeals = {
+  '1.Fish and rice' : '480',
+  '2.Fish and pasta' : '600',
+  '3.Fish baked' : '550',
+  '4.Fish sandwich' : '450',
+  '5.Fish salad' : '290',
+  '6.Fish & cheese' : '400',
+  '7.Fish grilled' : '350',
+  '8. Fish n chips' : '5000'
+  }
+
+maintainexercises= {
+  '1.Cardio 20mins' : '150',
+  '2.Upper body 30 mins' : '200',
+  '3.Lower body 20 mins' : '250',
+  '4.Chest 30 mins' : '70',
+  '5.Arms 30 mins' : '50',
+  '6.Back 30 mins' : '90',
+  '7.Legs 30 mins' : '120',
+  '8.Upper + Lower 1hr' : '300',
+  '9.Upper + lower + Cario 45 hr' : '450'
+  }
+
+
+gainexercises = {
+  '1.Cardio 10mins' : '70',
+  '2.Upper body 40 mins' : '210',
+  '3.Lower body 35 mins' : '270',
+  '4.Chest 45 mins' : '110',
+  '5.Arms 45 mins' : '70',
+  '6.Back 45 mins' : '110',
+  '7.Legs 45 mins' : '180',
+  '8.Upper + Lower 1.5hr' : '400',
+  '9.Upper + lower + Cario 1 hr' : '200'
+  }
+
+loseexercises = {
+  '1.Cardio 45mins' : '400',
+  '2.Upper body 30 mins' : '200',
+  '3.Lower body 20 mins' : '250',
+  '4.Chest 30 mins' : '70',
+  '5.Arms 30 mins' : '50',
+  '6.Back 30 mins' : '90',
+  '7.Legs 30 mins' : '120',
+  '8.Upper + Lower 1hr' : '300',
+  '9.Upper + lower + Cario 2 hr' : '650'
+  }
+
+def userstats():
+  global name
+  name = input("Please enter your name: ")
+  global gender
+  gender = str(input("Enter gender: M or F: ")).upper()
+  # print(gender)
+  # print((gender != 'M'))
+  while ((gender != "M") and (gender != "F")):
+    gender = input("wrong input, enter gender: M or F: ")
+  global age 
+  age = input("Please enter your age: ")
+  while (not age.isdigit()):
+    age = (input("wrong input, enter integer age :"))
+  age = float(age)
+  global height 
+  height= input("Please enter your height in cms (e.g: 171; 1 in = 2.54 cms, so if you're 5 feet tall, you're 152 cms tall) : ")
+  while (not height.isdigit()):
+     height = (input("wrong input, enter height :"))
+  height = float(height)
+  global weight 
+  weight = (input("Please enter your weight in kgs: (1 LB = .45 KG, so if you're 150 lbs you're 68 kgs)"))
+  while (not weight.isdigit()):
+     weight = (input("wrong input, enter weight :"))
+  weight = float(weight)
+
+  global activitylevel
+  print("What is your activity level:     1. Sedentary, 2. Lightly Active, 3. Moderately Active, 4. Very Active? ")
+  activel = input("Enter 1,2,3,or 4: ")
+  # while (not activel.isdigit()):
+  #    activel = input("wrong input, enter 1,2,3 or 4 :")
+  # activel = int(activel)
+  while ((not activel.isdigit()) or (int(activel) not in (1,2,3,4))):
+    print("Wrong input try again")
+    activel = input("What is your activity level (enter 1,2,3,or 4):  ")
+  if (activel == '1'):
+    activitylevel = 'Sedentary'
+  elif (activel == '2'):
+    activitylevel = 'Lightly Active'
+  elif (activel == '3'):
+    activitylevel = 'Moderately Active'
+  elif (activel == '4'):
+    activitylevel = 'Very Active'
+
+  global caldiff
+  global goal 
+  goal = input("What is your goal: 1. Maintain weight, 2. Gain weight, 3. Lose weight. Type 1, 2 or 3: ")
+  while ((not goal.isdigit()) or (int(goal) not in (1,2,3))):
+    print("Wrong input, Enter 1, 2, or 3 depending on your goal")
+    goal = input("What is your goal: 1. Maintain weight, 2. Gain weight, 3. Lose weight. Type 1, 2 or 3: ")
+  goal = float(goal)
+  # print(goal == 2)
+  global exerdict
+  if (goal == 1):
+    print("In order to maintain weight, you should be consuming your TDEE calories.")
+    exerdict = 'maintainexercises'
+    caldiff = 0
+  elif (goal == 2):
+    print("In order to gain weight, you should be in a surplus of tdee+ 200 calories")
+    exerdict = 'gainexercises'
+    caldiff = 200
+  elif (goal == 3):
+    exerdict = 'loseexercises'
+    print("In order to lose weight, you should be consuming your TDEE -300 calories.")
+    caldiff = 300
+  return (name, age, gender,activitylevel, height,weight, goal, exerdict) 
+
+#   # print(exercises)
+# print(exerdict)
+# name = exerdict
+
+def meatpreference():
+  meatpref = input("What type of meat do you prefer: chicken, beef or fish?: ")
+  meatpref = meatpref.lower().replace(" ", "")
+  while (not meatpref.isalpha()):
+    meatpref = input("wrong input, try again: ")
+  while meatpref not in ('chicken', 'beef', 'fish'):
+    print("Wrong input ")
+    meatpref = input("What type of meat do you prefer: chicken, beef or fish?: ")
+  return meatpref
+
+def exercises(): 
+    print("Choose an exercise from the list, press enter after each")
+    # for e in globals()[exerdict]:
+    #   print(e)
+    
+    for key,val in eval(exerdict).items():
+      print (key,"=>" ,val)
+    global ex1,ex2,ex3
+    ex1 = (input("Enter exercises 1: "))
+    ex2 = (input("Enter exercises 2:"))
+    ex3  = (input("Enter exercises 3:"))
+    
+    # for ex1 not in range(10) or ex2 not in range(10) or ex4 not in range(10)
+    while (not ex1.isdigit()) or (not ex2.isdigit()) or (not ex3.isdigit()):
+      print("wrong input")
+      ex1 = (input("Enter exercises 1: "))
+      ex2 = (input("Enter exercises 2:"))
+      ex3  = (input("Enter exercises 3:"))
+    while int(ex1 )not in range(1,10) or int(ex2) not in range(1,10) or int(ex3) not in range(1,10):
+      print("wrong input, enter exercises from the shown list above ")
+      ex1 = (input("Enter exercises 1: "))
+      ex2 = (input("Enter exercises 2:"))
+      ex3  = (input("Enter exercises 3:"))
+    
+    return(ex1,ex2,ex3)
+    
+
+
+def caloriesfromexercise(exe1,exe2,exe3):
+  caloriesburnt=0
+  for key,val in eval(exerdict).items():
+    # print(key, exe1,exe2,exe2)
+    if key.startswith(exe1,0,1) or key.startswith(exe2,0,1) or key.startswith(exe3,0,1):
+      caloriesburnt = caloriesburnt + int(val)
+  return caloriesburnt
+
+def caloriesformulated(gnder, hght, wght, ag, actl):
+  bmr = 0
+  tdee = 0
+  activitylevelvalue = 0
+  if (gnder == 'M'):
+    bmr = (hght*6.25) + (wght*9.9) -(ag * 4.92) + 5
+    if (actl.startswith('S')):
+      activitylevelvalue = 1.2
+    elif (actl.startswith('L')):
+      activitylevelvalue = 1.375
+    elif (actl.startswith('M')):
+      activitylevelvalue = 1.55
+    elif (actl.startswith('V')):
+      activitylevelvalue = 1.725
+
+  else:
+    bmr = (hght*6.25) + (wght*9.9) -(ag * 4.92) - 161
+    if (actl.startswith('S')):
+      activitylevelvalue = 1.1
+    elif (actl.startswith('L')):
+      activitylevelvalue = 1.275
+    elif (actl.startswith('M')):
+      activitylevelvalue = 1.35
+    elif (actl.startswith('V')):
+      activitylevelvalue = 1.725
+  tdee = bmr * activitylevelvalue
+  return(tdee)
+
+def caloriesconsumed(m1,m2,m3,mtpref):
+  cals=0
+  for key,val in eval(mtpref).items():
+    # print(key, exe1,exe2,exe2)
+    if key.startswith(m1,0,1) or key.startswith(m2,0,1) or key.startswith(m3,0,1):
+      cals = cals + int(val) 
+  return(cals)
+
+def goalcals(calstdee, weightgoal):
+  if (weightgoal == 1):
+    gcals = calstdee
+  elif (weightgoal == 2):
+    gcals = (calstdee+200)
+  else:
+    gcals = (calstdee - 300)
+  return gcals
+
+def checkcalories(calstdee, calsfood):
+    if (calstdee == calsfood):
+      print("You are perfectly on track")
+    elif (calstdee > calsfood):
+      print("You have %d remaining calories that you can use for snacks!" % (calstdee-calsfood))
+    elif (calstdee < calsfood):
+      print("You are %d calories over your goal. Watch what you eat!" % (calsfood -calstdee))
+
+def progress(calsdiff, weightgoal):
+  print("Assuming you plan to follow this track, lets see how much progress can you make over a month:")
+  time = 30
+  if (weightgoal == 1):
+    #linear graph
+    calsdiff
+#     t = np.arange(0, 30, 1)
+#     y = np.arange(0,int(weight),int(weight))
+#     plt.plot(y,t, 'r--')
+#     plt.show()
+    X = range(31)
+    plt.plot(X, [weight for x in X])
+    plt.show()
+    return 0 
+  elif (weightgoal == 2):
+    gainweight = 10
+#     weight += gainweight
+    t = [5,10,15,20,25,30] 
+    # corresponding y axis values 
+    y = [weight,weight+2,weight+4,weight+6,weight+8,weight+10] 
+    # plotting the points  
+    plt.plot(t, y, color='red', linestyle='dashed', linewidth = 3, 
+    marker='X', markerfacecolor='black', markersize=15) 
+    plt.xlabel('Days') 
+    plt.ylabel('Weight Change') 
+    plt.title('Weight Gain Over a Month') 
+    plt.show() 
+    return (gainweight)
+  elif (weightgoal == 3):
+        calsdiff = calsdiff * 30
+        weightlost = -1*(calsdiff / 3500)
+        h = [5,10,15,20,25,30] 
+        zz = np.arange(weight,(weight+weightlost), (weightlost/6))
+        y = zz
+        # plotting the points  
+        plt.plot(h, y, color='red', linestyle='dashed', linewidth = 3, 
+             marker='X', markerfacecolor='black', markersize=15) 
+        plt.xlabel('days') 
+        plt.ylabel('weight') 
+        plt.title('weight lost over a month (pounds)') 
+        plt.show() 
+        return(weightlost)
+
+def  dailyroutine(m1,m2,m3,mtpref,exe1,exe2,exe3):
+  print("Lets summarize your daily routine:")
+  print("Your 3 meals are: ")
+  for key,val in eval(mtpref).items():
+    # print(key, exe1,exe2,exe2)
+    if key.startswith(m1,0,1) or key.startswith(m2,0,1) or key.startswith(m3,0,1):
+      print(key)
+  print("Your three daily exercises are: ")
+  for key,val in eval(exerdict).items():
+    # print(key, exe1,exe2,exe2)
+    if key.startswith(exe1,0,1) or key.startswith(exe2,0,1) or key.startswith(exe3,0,1):
+      print(key)
+  
+  
+print("Hello, Welcome to Fitplanner!")
+userstats()
+meatpref = meatpreference()
+print("Based on your meat preference, here are some meals and their calories to choose from: ")
+if (meatpref == 'chicken'):
+  for key,val in chickenmeals.items():
+    print (key,"=>" ,val)
+    meatdict = "chickenmeals"
+if (meatpref == 'beef'):
+  for key,val in beefmeals.items():
+    print (key,"=>" ,val)
+    meatdict = "beefmeals"
+if (meatpref == 'fish'):
+  for key,val in fishmeals.items():
+    print (key,"=>" ,val)
+    meatdict = "fishmeals"
+print("One by one, enter numbers of three meals that you like : ")
+meal1 = input("meal 1: ")
+meal2 = input("Meal 2: ")
+meal3 = input("Meal 3:")
+
+while (not meal1.isdigit()) or (not meal2.isdigit()) or (not meal3.isdigit()):
+    print("wrong input")
+    meal1 = (input("enter meal 1: "))
+    meal2 = (input("enter meal 2:"))
+    meal3  = (input("enter meal 3:"))
+while int(meal1)not in range(1,9) or int(meal2) not in range(1,9) or int(meal3) not in range(1,9):
+      print("wrong input: ")
+      meal1 = (input("enter meal 1: "))
+      meal2 = (input("enter meal 2:"))
+      meal3  = (input("enter meal 3:"))
+
+exercises()
+calsburnt = caloriesfromexercise(ex1,ex2,ex3)
+calsfromtdee = caloriesformulated(gender, height, weight, age, activitylevel)
+calsconsumed = caloriesconsumed(meal1,meal2, meal3, meatdict)
+goalcalorieintake = goalcals(calsfromtdee, goal)
+
+print("Calories that you will burn by exercising:", calsburnt)
+print("Your TDEE calories:" , calsfromtdee)
+print("Calories you will eat:" ,calsconsumed)
+
+print("Your goal calories are: ", goalcalorieintake)
+checkcalories(goalcalorieintake, calsconsumed)
+
+print("your weight will change by %f pounds" % progress(caldiff,goal))
+# AND MAYBE PLOT PROGRESS OVER A MONTH USING PANDAS
+dailyroutine(meal1,meal2,meal3,meatdict,ex1,ex2,ex3)
